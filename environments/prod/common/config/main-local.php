@@ -1,12 +1,14 @@
 <?php
-
+$dsn = env('DSN');
+$username = env('DB_USER');
+$password = env('DB_PASSWORD');
 return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => $dsn,
+            'username' => $username,
+            'password' => $password,
             'charset' => 'utf8',
         ],
         'mailer' => [

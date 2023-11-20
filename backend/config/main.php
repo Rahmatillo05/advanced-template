@@ -15,6 +15,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'baseUrl' => '/backend',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -37,14 +38,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'scriptUrl' => '/backend/index.php',
             'rules' => [
             ],
-        ],
-        */
+        ]
     ],
     'params' => $params,
 ];
