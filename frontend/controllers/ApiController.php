@@ -2,17 +2,14 @@
 
 namespace frontend\controllers;
 
+use common\components\ResponseHelper;
 use yii\rest\Controller;
 
 class ApiController extends Controller
 {
-
-    public function actionIndex()
+    public function actionIndex(): array
     {
-        return [
-            'status' => env('DSN'),
-            'message' => 'Welcome to API!'
-        ];
+        return ResponseHelper::success('Welcome to API!');
     }
 
 }
