@@ -21,6 +21,7 @@ class m231121_034442_create_user_tokens_table extends Migration
             'expired_at' => $this->integer(),
             'is_deleted' => $this->integer(),
             'updated_at' => $this->integer(),
+            'deleted_at' => $this->integer()
         ]);
         $this->createIndex(
             'idx-user_tokens-user_id',
