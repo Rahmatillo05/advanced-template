@@ -2,7 +2,10 @@
 
 namespace common\models;
 
+use common\helpers\Auth;
+use common\repositories\UserRepository;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 
 /**
@@ -16,6 +19,9 @@ class LoginForm extends Model
     public $password;
 
     private $_user;
+
+    public string $platform = 'front';
+
 
 
     /**
@@ -36,7 +42,7 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
+    public function validatePassword(string $attribute, array $params): void
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
@@ -49,12 +55,17 @@ class LoginForm extends Model
     /**
      * Logs in a user using the provided username and password.
      *
-     * @return bool whether the user is logged in successfully
+     * @return array|false the user whether the user is logged in successfully
+     * @throws Exception
      */
-    public function login()
+    public function login(): bool|array
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            $repository = new UserRepository($this->_user);
+            return [
+                'user' => $this->_user,
+                'token' => $repository->generateToken($this->_user),
+            ];
         }
 
         return false;
@@ -65,10 +76,10 @@ class LoginForm extends Model
      *
      * @return User|null
      */
-    protected function getUser()
+    protected function getUser(): ?User
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Auth::findByUsername($this->username);
         }
 
         return $this->_user;

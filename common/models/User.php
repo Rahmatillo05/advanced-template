@@ -106,4 +106,9 @@ class User extends BaseActiveRecord implements IdentityInterface
             ->orderBy('created_at DESC')
             ->limit(1);
     }
+
+    public function validatePassword($password): bool
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
 }

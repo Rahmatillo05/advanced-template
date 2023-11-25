@@ -10,7 +10,6 @@ use yii\base\Exception;
 
 class UserRepository extends BaseRepository implements iUserRepository
 {
-
     /**
      * @throws Exception
      */
@@ -40,10 +39,5 @@ class UserRepository extends BaseRepository implements iUserRepository
     {
         $token = UserTokens::findOne(['token' => $token, 'status' => UserTokens::STATUS_ACTIVE]);
         return $token?->user;
-    }
-
-    public function login()
-    {
-        
     }
 }

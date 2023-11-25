@@ -28,4 +28,9 @@ class Auth extends User
     {
         return Yii::$app->user->isGuest;
     }
+
+    public static function findByUsername(string $username): ?User
+    {
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
 }
