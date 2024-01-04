@@ -11,10 +11,15 @@ class AuthRepository
     /**
      * @throws Exception
      */
-    public function login(Request $request, string $platform = 'front')
+    public function login(Request $request, string $platform = 'front'): bool|array
     {
         $model = new LoginForm();
         $model->load($request->post(), '');
         return $model->login();
+    }
+
+    public function signup(Request $request)
+    {
+
     }
 }
