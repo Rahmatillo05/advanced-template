@@ -26,4 +26,5 @@ return [
             'slug' => 'low'
         ]
     ],
+    'images' => ['jpg', 'png', 'jpeg', 'gif', 'webp']
 ];

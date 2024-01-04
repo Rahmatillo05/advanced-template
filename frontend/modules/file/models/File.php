@@ -77,7 +77,8 @@ class File extends \yii\db\ActiveRecord
     public function fields(): array
     {
         return ArrayHelper::merge(parent::fields(), [
-           'thumbs' 
+            'url',
+           'thumbs'
         ]);
     }
     
@@ -86,8 +87,11 @@ class File extends \yii\db\ActiveRecord
         return "{$this->path}/{$this->file}";
     }
 
-    public function getThumbs(): array
+    public function getThumbs(): ?array
     {
+        if (!in_array($this->ext, Yii::$app->params['images'])) {
+            return null;
+        }
         $thumbs = Yii::$app->params['thumbs'];
         $thumbsImage = [];
         foreach ($thumbs as $key => $val){
@@ -98,5 +102,10 @@ class File extends \yii\db\ActiveRecord
         $thumbsImage['original']['src'] = "{$this->domain}{$this->path}/{$this->slug}.{$this->ext}";
         $thumbsImage['original']['path'] = "{$this->path}/{$this->slug}.{$this->ext}";
         return $thumbsImage;
+    }
+
+    public function getUrl(): string
+    {
+        return "{$this->domain}{$this->path}/{$this->slug}.{$this->ext}";
     }
 }

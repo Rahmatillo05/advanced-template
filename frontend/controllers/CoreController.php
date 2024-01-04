@@ -29,7 +29,8 @@ class CoreController extends ActiveController
             'except' => [
                 'index',
                 'view',
-                'files'
+                'files',
+                'upload'
             ],
         ];
 

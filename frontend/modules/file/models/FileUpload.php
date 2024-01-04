@@ -2,6 +2,7 @@
 
 namespace frontend\modules\file\models;
 
+use common\helpers\Auth;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Model;
@@ -35,7 +36,7 @@ class FileUpload extends Model
         $d = date('d');
         $h = date('H');
         $min = date('i');
-        $user_id = Yii::$app->user->id;
+        $user_id = Auth::id();
         $folder = Url::base() . "/upload/$y/$m/$d/$h/$min";
         $path = Yii::getAlias('@frontend') . "/web$folder";
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -55,11 +56,13 @@ class FileUpload extends Model
                     $db_file->ext = $file->extension;
                     $db_file->user_id = $user_id;
                     $db_file->path = $folder;
-                    $db_file->domain = Yii::$app->params['domain'];
+                    $db_file->domain = getenv('DOMAIN');
                     $db_file->size = $file->size;
                     if ($file->saveAs("$path/$db_file->file") && $db_file->save()) {
-                        $data[] = $db_file->id;
-                        $this->createThumbs($db_file);
+                        $data[] = $db_file;
+                        if (in_array($db_file->ext, Yii::$app->params['images'])) {
+                            $this->createThumbs($db_file);
+                        }
                         continue;
                     }
                     throw new ServerErrorHttpException("Fayllar saqlanmadi");
@@ -78,6 +81,9 @@ class FileUpload extends Model
 
     public function createThumbs(File $file): ?bool
     {
+        if (!$file) {
+            return null;
+        }
         $origin = $file->getDist();
         $origin_path = str_replace('/', DIRECTORY_SEPARATOR, Yii::getAlias('@frontend') . "/web$origin");
         $thumbs = Yii::$app->params['thumbs'];
