@@ -28,7 +28,8 @@ class CoreController extends ActiveController
             'class' => HttpBearerAuth::class,
             'except' => [
                 'index',
-                'view'
+                'view',
+                'files'
             ],
         ];
 

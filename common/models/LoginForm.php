@@ -42,7 +42,7 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword(string $attribute, array $params): void
+    public function validatePassword(string $attribute): void
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
@@ -67,8 +67,7 @@ class LoginForm extends Model
                 'token' => $repository->generateToken($this->_user),
             ];
         }
-
-        return false;
+        return $this->errors ?? false;
     }
 
     /**
