@@ -6,12 +6,14 @@ use common\components\BaseRepository;
 use common\models\User;
 use common\models\UserTokens;
 use common\repositories\interfaces\iUserRepository;
+use Throwable;
 use yii\base\Exception;
 
 class UserRepository extends BaseRepository implements iUserRepository
 {
+
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function generateToken(User $user): ?string
     {
@@ -20,11 +22,10 @@ class UserRepository extends BaseRepository implements iUserRepository
             ->orderBy(['created_at' => SORT_DESC])
             ->one();
         /**
-         * @var UserTokens $user_token 
+         * @var UserTokens $user_token
          */
         if ($user_token) {
-            $user_token->status = UserTokens::STATUS_DELETED;
-            $user_token->save();
+            $user_token->delete();
         }
         $user_token = new UserTokens();
         $user_token->user_id = $user->id;

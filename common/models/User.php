@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\components\BaseActiveRecord;
+use common\repositories\UserRepository;
 use Yii;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
@@ -20,6 +21,7 @@ use yii\web\IdentityInterface;
  * @property string $password_reset_token
  * @property string $verification_token
  * @property string $email
+ * @property string $phone
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -65,11 +67,10 @@ class User extends BaseActiveRecord implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @throws NotSupportedException
      */
     public static function findIdentityByAccessToken($token, $type = null): ?IdentityInterface
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return  (new UserRepository((new User())))->getUserByToken($token);
     }
     /**
      * {@inheritdoc}
@@ -110,5 +111,15 @@ class User extends BaseActiveRecord implements IdentityInterface
     public function validatePassword($password): bool
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 }

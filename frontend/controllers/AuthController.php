@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\LoginForm;
+use common\models\User;
 use common\repositories\AuthRepository;
 use yii\base\Exception;
 use yii\rest\Controller;
@@ -21,11 +22,22 @@ class AuthController extends Controller
     /**
      * @throws MethodNotAllowedHttpException|Exception
      */
-    public function actionLogin(Request $request): bool|array
+    public function actionLogin(Request $request)
     {
         if (!$request->isPost) {
             throw new MethodNotAllowedHttpException();
         }
         return $this->repository->login($request);
+    }
+
+    /**
+     * @throws MethodNotAllowedHttpException
+     */
+    public function actionSignUp(Request $request): User|bool|array
+    {
+        if (!$request->isPost) {
+            throw new MethodNotAllowedHttpException();
+        }
+        return $this->repository->signup($request);
     }
 }

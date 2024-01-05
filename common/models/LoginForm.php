@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\helpers\Auth;
 use common\repositories\UserRepository;
+use Throwable;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
@@ -32,6 +33,7 @@ class LoginForm extends Model
         return [
             [['username', 'password'], 'required'],
             ['password', 'validatePassword'],
+            ['username', 'trim'],
         ];
     }
 
@@ -40,7 +42,6 @@ class LoginForm extends Model
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
      */
     public function validatePassword(string $attribute): void
     {
@@ -56,7 +57,7 @@ class LoginForm extends Model
      * Logs in a user using the provided username and password.
      *
      * @return array|false the user whether the user is logged in successfully
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function login(): bool|array
     {
